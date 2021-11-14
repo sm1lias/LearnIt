@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "417007112044",
+    "project_id": "learnit-31f85",
+    "storage_bucket": "learnit-31f85.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:417007112044:android:d31f5ad372e0e48da6ed49",
+        "android_client_info": {
+          "package_name": "com.smilias.learnit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "417007112044-up6j5bn47qclo5gfve3j38nfjhf08t1d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAl6S05l2aPVRD3NSTaPL2XwChKhspDWwI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "417007112044-up6j5bn47qclo5gfve3j38nfjhf08t1d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
