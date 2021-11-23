@@ -19,14 +19,19 @@ class LogInScreenViewModel @Inject constructor(
     var user = mutableStateOf<FirebaseUser?>(null)
 
     fun signIn(email: String, password: String) {
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    user.value = auth.currentUser
-                } else {
-                    Toast.makeText(context, "Authentication Failed", Toast.LENGTH_LONG).show()
+        if (checkCredentials(email, password)) {
+            auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        user.value = auth.currentUser
+                    } else {
+                        Toast.makeText(context, "Authentication Failed", Toast.LENGTH_LONG).show()
+                    }
                 }
-            }
+        } else {
+            Toast.makeText(context, "Email and password can't be empty", Toast.LENGTH_LONG).show()
+        }
+
     }
 
     fun signUp(email: String, password: String) {
@@ -39,4 +44,7 @@ class LogInScreenViewModel @Inject constructor(
                 }
             }
     }
+
+    private fun checkCredentials(email: String, password: String): Boolean =
+        !(email.trim().isEmpty() || password.trim().isEmpty())
 }

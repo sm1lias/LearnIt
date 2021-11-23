@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import com.smilias.learnit.Screen
 
 @Composable
 fun MenuScreen(navController: NavController) {
@@ -15,7 +16,9 @@ fun MenuScreen(navController: NavController) {
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ){
-        Button(onClick={}){
+        Button(onClick={
+            navController.navigate(Screen.VideoScreen.route)
+        }){
             Text(text = "Video Watch")
         }
     }
