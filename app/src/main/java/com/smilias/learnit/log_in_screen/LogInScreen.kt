@@ -34,28 +34,28 @@ fun LogInScreen(
                 .padding(horizontal = 70.dp)
 
         ) {
-            val user by remember {
-                mutableStateOf(viewModel.user)
-            }
-            var usernameText by remember {
-                mutableStateOf("")
-            }
-            var passwordText by remember {
-                mutableStateOf("")
-            }
+//            val user by remember {
+//                mutableStateOf(viewModel.user)
+//            }
+//            var usernameText by remember {
+//                mutableStateOf("")
+//            }
+//            var passwordText by remember {
+//                mutableStateOf("")
+//            }
             var passwordVisibility by remember {
                 mutableStateOf(false)
             }
             OutlinedTextField(
-                value = usernameText,
-                onValueChange = { usernameText = it },
+                value = viewModel.email,
+                onValueChange = viewModel::onEmailChange,
                 label = { Text(stringResource(R.string.email)) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
             )
             HeightSpacer(10)
             OutlinedTextField(
-                value = passwordText,
-                onValueChange = { passwordText = it },
+                value = viewModel.password,
+                onValueChange = viewModel::onPasswordChange,
                 label = { Text(stringResource(R.string.password)) },
                 visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -74,20 +74,17 @@ fun LogInScreen(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Button(onClick = {
-                    viewModel.signIn(
-                        usernameText,
-                        passwordText
-                    )
-                    user.value?.let{
+                    viewModel.signIn()
+                    viewModel.user?.let {
                         navController.navigate(Screen.MenuScreen.route)
                     }
                 }) {
                     Text(text = stringResource(R.string.sign_in))
                 }
-                Button(onClick = { viewModel.signUp(
-                    usernameText,
-                    passwordText
-                ) }) {
+                Button(onClick = {
+                    viewModel.signUp(
+                    )
+                }) {
                     Text(text = stringResource(R.string.sign_up))
                 }
             }
@@ -99,7 +96,6 @@ fun LogInScreen(
         }
 
     }
-
 
 
 }
