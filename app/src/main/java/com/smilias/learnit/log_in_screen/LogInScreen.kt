@@ -19,6 +19,7 @@ import androidx.navigation.NavController
 import com.smilias.learnit.HeightSpacer
 import com.smilias.learnit.R
 import com.smilias.learnit.Screen
+import kotlinx.coroutines.delay
 
 @Composable
 fun LogInScreen(
@@ -73,18 +74,20 @@ fun LogInScreen(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Button(onClick = {
-                    viewModel.signIn()
-                    viewModel.user?.let {
-                        navController.navigate(Screen.MenuScreen.route)
-                    }
-                }) {
+                Button(onClick = viewModel::signIn) {
                     Text(text = stringResource(R.string.sign_in))
+                    LaunchedEffect(key1 = viewModel.user){
+                        viewModel.user?.let {
+                            navController.navigate(Screen.MenuScreen.route){
+                                popUpTo(Screen.LogInScreen.route){
+                                    inclusive=true
+                                }
+
+                            }
+                        }
+                    }
                 }
-                Button(onClick = {
-                    viewModel.signUp(
-                    )
-                }) {
+                Button(onClick = viewModel::signUp) {
                     Text(text = stringResource(R.string.sign_up))
                 }
             }

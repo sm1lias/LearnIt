@@ -57,7 +57,7 @@ class LogInScreenViewModel @Inject constructor(
             auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        user = auth.currentUser
+                        Toast.makeText(context, "Signed up successfully", Toast.LENGTH_LONG).show()
                     } else {
                         Toast.makeText(context, "Authentication Failed", Toast.LENGTH_LONG).show()
                     }
