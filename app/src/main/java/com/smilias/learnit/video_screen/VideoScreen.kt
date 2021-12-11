@@ -98,20 +98,22 @@ fun VideoScreen(
     LaunchedEffect(viewModel.playing) {
         if (viewModel.playing) {
             context.foregroundStartService("Start")
-            when (PackageManager.PERMISSION_GRANTED) {
-                ContextCompat.checkSelfPermission(
-                    context,
-                    Manifest.permission.CAMERA
-                ) -> {
-                    photoLauncher.launch(uri)
-                }
-                else -> {
-                    // Asking for permission
-                    launcherForPermission.launch(Manifest.permission.CAMERA)
-                }
-            }
+            viewModel.captureImage()
+//            when (PackageManager.PERMISSION_GRANTED) {
+//                ContextCompat.checkSelfPermission(
+//                    context,
+//                    Manifest.permission.CAMERA
+//                ) -> {
+//                    photoLauncher.launch(uri)
+//                }
+//                else -> {
+//                    // Asking for permission
+//                    launcherForPermission.launch(Manifest.permission.CAMERA)
+//                }
+//            }
         } else {
             context.foregroundStartService("Exit")
+            viewModel.stopCapturing()
         }
     }
 

@@ -26,6 +26,7 @@ class PhotoCaptureService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val command = intent?.getStringExtra(INTENT_COMMAND)
         if (command == INTENT_COMMAND_EXIT) {
+            stopService()
             return START_NOT_STICKY
         }
         showNotification()
