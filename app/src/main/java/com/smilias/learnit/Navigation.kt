@@ -11,7 +11,7 @@ import com.smilias.learnit.video_screen.VideoScreen
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = Screen.LogInScreen.route) {
+    NavHost(navController = navController, startDestination = Screen.MenuScreen.route) {
         composable(route = Screen.LogInScreen.route) {
             LogInScreen(navController = navController)
         }
