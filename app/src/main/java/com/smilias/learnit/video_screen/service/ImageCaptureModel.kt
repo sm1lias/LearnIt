@@ -1,7 +1,6 @@
 package com.smilias.learnit.video_screen.service
 
 import android.content.Context
-import android.net.Uri
 import android.widget.Toast
 import androidx.core.net.toUri
 import com.cottacush.android.hiddencam.OnImageCapturedListener
@@ -13,6 +12,7 @@ import java.io.File
 
 class ImageCaptureModel(val context: Context, private val captureInfo: PhotoInfo): OnImageCapturedListener {
     private val firebaseData: FirebaseData = FirebaseData(captureInfo.user)
+    private val imageRecognition = ImageRecognition
     override fun onImageCaptureError(e: Throwable?) {
         Toast.makeText(context, "imaged captured error", Toast.LENGTH_LONG).show()
     }
@@ -23,11 +23,13 @@ class ImageCaptureModel(val context: Context, private val captureInfo: PhotoInfo
         Toast.makeText(context, "imaged captured user: ${captureInfo.user} $videoTime", Toast.LENGTH_LONG).show()
         val uri= File(image.absolutePath).toUri()
 
-        firebaseData.firebaseInfo.apply {
-            data=ImageRecognition.imageRecognition(context, uri)
-            time=videoTime
-        }
-        FirebaseJobs.write(firebaseData)
+
+
+        firebaseData.firebaseInfo.time=videoTime
+        imageRecognition.imageRecognition(context, uri, firebaseData)
+
+
+
 
     }
 }

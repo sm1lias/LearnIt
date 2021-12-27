@@ -7,6 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.cottacush.android.hiddencam.CaptureTimeFrequency
 import com.cottacush.android.hiddencam.HiddenCam
 import com.cottacush.android.hiddencam.OnImageCapturedListener
