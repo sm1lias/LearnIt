@@ -9,6 +9,6 @@ object FirebaseJobs {
 
     fun write(firebaseData: FirebaseData){
         database = Firebase.database.reference
-        database.child("users").child(firebaseData.user.toString().substring(34)).child(System.currentTimeMillis().toString()).setValue(firebaseData.firebaseInfo)
+        database.child("users").child(firebaseData.user!!.uid).child(System.currentTimeMillis().toString()).setValue(firebaseData.firebaseInfo)
     }
 }
