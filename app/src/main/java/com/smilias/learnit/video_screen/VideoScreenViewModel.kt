@@ -67,6 +67,7 @@ class VideoScreenViewModel @Inject constructor(
     override fun onCleared() {
         exoPlayer.value.playWhenReady = false
         context.foregroundStartService("Exit")
+        hiddenCam.stop()
     }
 
     fun startCapturing() {

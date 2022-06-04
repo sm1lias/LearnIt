@@ -4,9 +4,8 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Card
@@ -24,7 +23,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.smilias.learnit.Screen
-import com.smilias.learnit.video_screen.VideoScreenViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -34,15 +32,16 @@ fun MenuScreen(
 ) {
 
     LazyVerticalGrid(
-        cells = GridCells.Fixed(2), contentPadding = PaddingValues(5.dp)
-    ){
+        columns = GridCells.Fixed(2),
+        modifier = Modifier.padding(10.dp)
+    ) {
         items(viewModel.videoList.size) { index ->
             val videoInfo = viewModel.videoList[index]
             VideoCard(
                 painter = painterResource(id = videoInfo.thumb),
-                contentDescription =videoInfo.description,
-                title =videoInfo.title,
-                modifier =Modifier.fillMaxWidth(),
+                contentDescription = videoInfo.description,
+                title = videoInfo.title,
+                modifier = Modifier.fillMaxSize(),
                 url = videoInfo.source,
                 navController
             )
@@ -61,13 +60,18 @@ fun VideoCard(
     navController: NavController
 ) {
     Card(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .padding(10.dp)
+            .fillMaxSize(),
         shape = RoundedCornerShape(15.dp),
         elevation = 5.dp
     ) {
-        Box(modifier = Modifier.height(200.dp).clickable {
-            navController.navigate(Screen.VideoScreen.route+"/"+url.replace("/", "\\"))
-        },
+        Box(
+            modifier = Modifier
+                .height(200.dp)
+                .clickable {
+                    navController.navigate(Screen.VideoScreen.route + "/" + url.replace("/", "\\"))
+                }, contentAlignment = Alignment.Center
         ) {
             Image(
                 painter = painter,
@@ -78,7 +82,7 @@ fun VideoCard(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(12.dp),
-                contentAlignment = Alignment.BottomStart
+                contentAlignment = Alignment.BottomCenter
             ) {
                 Text(text = title, style = TextStyle(color = Color.White, fontSize = 16.sp))
             }
