@@ -1,13 +1,12 @@
 package com.smilias.learnit.utils
 
-import android.content.ContentValues
 import android.content.Context
-import android.graphics.Bitmap
-import android.net.Uri
-import android.os.Environment
-import android.provider.MediaStore
 import java.io.File
-import java.io.IOException
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+
 
 object Utils {
 
@@ -17,5 +16,20 @@ object Utils {
             mkdir()
         }
         return baseStorageFolder
+    }
+
+    fun getDateFromMillis(): String {
+        val formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
+        val instant = Instant.ofEpochMilli(System.currentTimeMillis())
+        val date = LocalDateTime.ofInstant(instant, ZoneId.systemDefault())
+        return formatter.format(date).replace("/", "-")
+
+    }
+
+    fun getTimeFromMillis(millis: Long): String {
+        val formatter = DateTimeFormatter.ofPattern("mm:ss.SSS")
+        val instant = Instant.ofEpochMilli(millis)
+        val date = LocalDateTime.ofInstant(instant, ZoneId.systemDefault())
+        return formatter.format(date)
     }
 }

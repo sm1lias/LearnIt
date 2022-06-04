@@ -7,6 +7,7 @@ import com.cottacush.android.hiddencam.OnImageCapturedListener
 import com.smilias.learnit.image_recognition.ImageRecognition
 import com.smilias.learnit.firebase.FirebaseData
 import com.smilias.learnit.firebase.FirebaseJobs
+import com.smilias.learnit.utils.Utils
 import com.smilias.learnit.video_screen.model.PhotoInfo
 import java.io.File
 
@@ -25,7 +26,7 @@ class ImageCaptureModel(val context: Context, private val captureInfo: PhotoInfo
 
 
 
-        firebaseData.firebaseInfo.time=videoTime
+        firebaseData.firebaseInfo.time= Utils.getTimeFromMillis(videoTime)
         imageRecognition.imageRecognition(context, uri, firebaseData)
 
 

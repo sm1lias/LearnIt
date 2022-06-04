@@ -55,6 +55,7 @@ object ImageRecognition {
             .setPerformanceMode(FaceDetectorOptions.PERFORMANCE_MODE_ACCURATE)
             .setLandmarkMode(FaceDetectorOptions.LANDMARK_MODE_ALL)
             .setClassificationMode(FaceDetectorOptions.CLASSIFICATION_MODE_ALL)
+            .setContourMode(FaceDetectorOptions.CONTOUR_MODE_ALL)
             .build()
 
         val detector = FaceDetection.getClient(highAccuracyOpts)
@@ -88,7 +89,8 @@ object ImageRecognition {
         }
 
 //        val canvas = Canvas(bitmap)
-        for (face in faces) {
+        if (faces.isNotEmpty()) {
+            val face = faces[0]
             val bounds = face.boundingBox
 //            canvas.drawRect(bounds, paint)
             val rotY = face.headEulerAngleY // Head is rotated to the right rotY degrees
@@ -107,17 +109,17 @@ object ImageRecognition {
             val upperLipBottomContour = face.getContour(FaceContour.UPPER_LIP_BOTTOM)?.points
 
             // If classification was enabled:
-            if (face.smilingProbability >0.5f) {
+            if (face.smilingProbability!! >0.5f) {
                 resultList.add("smiling")
                 val smileProb = face.smilingProbability
             }
-            if (face.rightEyeOpenProbability >0.5f) resultList.add("left eye opened") else resultList.add("left eye closed")
+            if (face.rightEyeOpenProbability!! >0.5f) resultList.add("left eye opened") else resultList.add("left eye closed")
 
 //            if (face.rightEyeOpenProbability >0.5f) {
 //                resultList.add("left eye opened")
 ////                val rightEyeOpenProb = face.rightEyeOpenProbability
 //            }
-            if (face.leftEyeOpenProbability >0.5f) resultList.add("right eye opened") else resultList.add("right eye closed")
+            if (face.leftEyeOpenProbability!! >0.5f) resultList.add("right eye opened") else resultList.add("right eye closed")
 //            if (face.leftEyeOpenProbability >0.5f) {
 //                resultList.add("right eye opened")
 ////                val rightEyeOpenProb = face.rightEyeOpenProbability
