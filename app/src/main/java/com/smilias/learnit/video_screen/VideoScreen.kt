@@ -32,6 +32,8 @@ fun VideoScreen(
     // This effect will be executed at each commit phase if
     // [sourceUrl] has changed.
     LaunchedEffect(sourceUrl) {
+        viewModel.videoUrl.value = sourceUrl
+        viewModel.getVideoTitleFromUrl()
         val dataSourceFactory: DataSource.Factory = DefaultDataSourceFactory(
             context,
             Util.getUserAgent(context, context.packageName)

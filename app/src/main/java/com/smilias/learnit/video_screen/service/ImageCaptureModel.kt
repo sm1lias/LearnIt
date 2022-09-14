@@ -11,7 +11,8 @@ import com.smilias.learnit.utils.Utils
 import com.smilias.learnit.video_screen.model.PhotoInfo
 import java.io.File
 
-class ImageCaptureModel(val context: Context, private val captureInfo: PhotoInfo): OnImageCapturedListener {
+class ImageCaptureModel(val context: Context, private val captureInfo: PhotoInfo) :
+    OnImageCapturedListener {
     private val firebaseData: FirebaseData = FirebaseData(captureInfo.user)
     private val imageRecognition = ImageRecognition
     override fun onImageCaptureError(e: Throwable?) {
@@ -20,16 +21,21 @@ class ImageCaptureModel(val context: Context, private val captureInfo: PhotoInfo
 
     override fun onImageCaptured(image: File) {
 
-        var videoTime=captureInfo.exoPlayer.value.contentPosition
-        Toast.makeText(context, "imaged captured user: ${captureInfo.user} $videoTime", Toast.LENGTH_LONG).show()
-        val uri= File(image.absolutePath).toUri()
+        var videoTime = captureInfo.exoPlayer.value.contentPosition
+        Toast.makeText(
+            context,
+            "imaged captured user: ${captureInfo.user} $videoTime",
+            Toast.LENGTH_LONG
+        ).show()
+        val uri = File(image.absolutePath).toUri()
 
 
 
-        firebaseData.firebaseInfo.time= Utils.getTimeFromMillis(videoTime)
+        firebaseData.firebaseInfo.apply {
+            time = Utils.getTimeFromMillis(videoTime)
+            title = captureInfo.title
+        }
         imageRecognition.imageRecognition(context, uri, firebaseData)
-
-
 
 
     }

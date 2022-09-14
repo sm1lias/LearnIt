@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.smilias.learnit.Screen
+import com.smilias.learnit.VideoList
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -35,8 +36,8 @@ fun MenuScreen(
         columns = GridCells.Fixed(2),
         modifier = Modifier.padding(10.dp)
     ) {
-        items(viewModel.videoList.size) { index ->
-            val videoInfo = viewModel.videoList[index]
+        items(VideoList.getVideoList().size) { index ->
+            val videoInfo = VideoList.getVideoList()[index]
             VideoCard(
                 painter = painterResource(id = videoInfo.thumb),
                 contentDescription = videoInfo.description,

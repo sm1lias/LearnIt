@@ -15,6 +15,7 @@ import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.smilias.learnit.VideoList
 import com.smilias.learnit.utils.Utils
 import com.smilias.learnit.utils.foregroundStartService
 import com.smilias.learnit.video_screen.model.PhotoInfo
@@ -27,6 +28,8 @@ import javax.inject.Inject
 class VideoScreenViewModel @Inject constructor(
     @ApplicationContext private val context: Context
 ) : ViewModel() {
+
+    var videoUrl = mutableStateOf("");
 
     val exoPlayer = mutableStateOf(
         SimpleExoPlayer.Builder(context).build().apply {
@@ -51,6 +54,15 @@ class VideoScreenViewModel @Inject constructor(
         targetResolution = Size(1080, 1920),
 //            targetRotation = Surface.ROTATION_180
     )
+
+    fun getVideoTitleFromUrl() {
+        captureInfo.title = VideoList.getVideoList().stream()
+            .filter { it.source ==this.videoUrl.value }
+            .findFirst()
+            .map { it.title }
+            .orElse("")
+            .toString()
+    }
 
 
 
