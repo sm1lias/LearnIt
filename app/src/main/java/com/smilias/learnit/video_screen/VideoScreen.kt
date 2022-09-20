@@ -1,7 +1,9 @@
 package com.smilias.learnit.video_screen
 
 import android.net.Uri
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -60,7 +62,7 @@ fun VideoScreen(
     }
 
     // Gateway to traditional Android Views
-    AndroidView(factory = { context ->
+    AndroidView(modifier = Modifier.fillMaxSize(),factory = { context ->
         PlayerView(context).apply {
             player = exoPlayer.value
         }

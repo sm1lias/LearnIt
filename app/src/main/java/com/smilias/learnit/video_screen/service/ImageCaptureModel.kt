@@ -1,6 +1,8 @@
 package com.smilias.learnit.video_screen.service
 
 import android.content.Context
+import android.location.Address
+import android.location.Geocoder
 import android.widget.Toast
 import androidx.core.net.toUri
 import com.cottacush.android.hiddencam.OnImageCapturedListener
@@ -10,6 +12,7 @@ import com.smilias.learnit.firebase.FirebaseJobs
 import com.smilias.learnit.utils.Utils
 import com.smilias.learnit.video_screen.model.PhotoInfo
 import java.io.File
+import java.util.*
 
 class ImageCaptureModel(val context: Context, private val captureInfo: PhotoInfo) :
     OnImageCapturedListener {
@@ -34,6 +37,7 @@ class ImageCaptureModel(val context: Context, private val captureInfo: PhotoInfo
         firebaseData.firebaseInfo.apply {
             time = Utils.getTimeFromMillis(videoTime)
             title = captureInfo.title
+            location = captureInfo.location?.value!!
         }
         imageRecognition.imageRecognition(context, uri, firebaseData)
 

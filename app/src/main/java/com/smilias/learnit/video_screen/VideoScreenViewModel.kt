@@ -16,6 +16,7 @@ import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.smilias.learnit.VideoList
+import com.smilias.learnit.menu_screen.LocationLiveData
 import com.smilias.learnit.utils.Utils
 import com.smilias.learnit.utils.foregroundStartService
 import com.smilias.learnit.video_screen.model.PhotoInfo
@@ -62,6 +63,7 @@ class VideoScreenViewModel @Inject constructor(
             .map { it.title }
             .orElse("")
             .toString()
+        captureInfo.location = locationLiveData
     }
 
 
@@ -88,6 +90,11 @@ class VideoScreenViewModel @Inject constructor(
 
     fun stopCapturing() {
         hiddenCam.stop()
+    }
+
+    private val locationLiveData = LocationLiveData(context)
+    init {
+        locationLiveData.startLocationUpdates()
     }
 
 
