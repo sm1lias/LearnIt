@@ -5,4 +5,8 @@
     <string name="sign_in">Sign In</string>
     <string name="sign_up">Sign Up</string>
     <string name="forgot_password">Forgot your password?</string>
+    <string name="cant_be_null">Can\'t be empty</string>
+    <string name="auth_success">Signed up successfully</string>
+    <string name="auth_failed">Authentication failed\n</string>
+    <string name="sign_up_success">Signed up successfully</string>
 </resources>
