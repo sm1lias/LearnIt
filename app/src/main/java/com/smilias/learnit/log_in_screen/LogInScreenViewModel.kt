@@ -38,6 +38,11 @@ class LogInScreenViewModel @Inject constructor(
 
             is LogInScreenEvent.OnPasswordEnter -> state = state.copy(password = event.password)
             is LogInScreenEvent.OnSignUp -> signUp()
+            is LogInScreenEvent.OnPermissionNotGranted -> {
+                viewModelScope.launch {
+                    state.uiEvent.send(UiEvent.ShowSnackbar(UiText.StringResource(R.string.permissions_not_granted)))
+                }
+            }
         }
     }
 

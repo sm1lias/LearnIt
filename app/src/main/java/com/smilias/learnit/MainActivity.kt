@@ -7,7 +7,10 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.tooling.preview.Preview
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.MultiplePermissionsState
 import com.smilias.learnit.ui.theme.LearnItTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -27,11 +30,3 @@ class MainActivity : ComponentActivity() {
 }
 
 
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    LearnItTheme {
-        Navigation()
-    }
-}

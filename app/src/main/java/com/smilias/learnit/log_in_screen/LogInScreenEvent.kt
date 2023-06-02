@@ -5,4 +5,6 @@ sealed class LogInScreenEvent{
     data class OnPasswordEnter(val password: String): LogInScreenEvent()
     object OnSignUp: LogInScreenEvent()
     object OnSignIn: LogInScreenEvent()
+
+    object OnPermissionNotGranted: LogInScreenEvent()
 }

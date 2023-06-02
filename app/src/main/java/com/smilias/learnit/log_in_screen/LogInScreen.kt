@@ -23,9 +23,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.MultiplePermissionsState
+import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.smilias.learnit.HeightSpacer
 import com.smilias.learnit.R
+import com.smilias.learnit.ui.theme.LearnItTheme
 import com.smilias.learnit.utils.UiEvent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -35,6 +37,7 @@ import kotlinx.coroutines.flow.receiveAsFlow
 fun LogInScreen(
     scaffoldState: ScaffoldState,
     state: LogInState,
+    permissionsState: MultiplePermissionsState,
     onNavigate: (UiEvent.Navigate) -> Unit,
     onEvent: (LogInScreenEvent) -> Unit
 ) {
@@ -55,17 +58,6 @@ fun LogInScreen(
             }
         }
     }
-
-    val permissionsState = rememberMultiplePermissionsState(
-        permissions = listOf(
-            Manifest.permission.CAMERA,
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION,
-        )
-    )
-    PermissionsRequest(permissionsState)
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -110,24 +102,10 @@ fun LogInScreen(
                 if (permissionsState.allPermissionsGranted) {
                     onEvent(LogInScreenEvent.OnSignIn)
                 } else {
-                    Toast.makeText(
-                        context,
-                        "You can't proceed without required permissions",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    onEvent(LogInScreenEvent.OnPermissionNotGranted)
                 }
             }) {
                 Text(text = stringResource(R.string.sign_in))
-//                LaunchedEffect(key1 = viewModel.user) {
-//                    viewModel.user?.let {
-//                        navController.navigate(Screen.MenuScreen.route) {
-//                            popUpTo(Screen.LogInScreen.route) {
-//                                inclusive = true
-//                            }
-//
-//                        }
-//                    }
-//                }
             }
             Button(
                 onClick = { onEvent(LogInScreenEvent.OnSignUp) }
@@ -141,16 +119,31 @@ fun LogInScreen(
 }
 
 @OptIn(ExperimentalPermissionsApi::class)
+@Preview(showBackground = true)
 @Composable
-private fun PermissionsRequest(multiplePermissionsState: MultiplePermissionsState) {
-    if (multiplePermissionsState.allPermissionsGranted) {
-        // If all permissions are granted, then show screen with the feature enabled
-//        Text("Camera and Read storage permissions Granted! Thank you!")
+fun LoginScreenPreview() {
+    LearnItTheme {
+        LogInScreen(scaffoldState = rememberScaffoldState(), state = LogInState(), permissionsState = MultiplePermissionsStatePreview(), onNavigate = {}, onEvent ={} )
+    }
+}
 
-    } else {
-        LaunchedEffect(key1 = multiplePermissionsState.allPermissionsGranted) {
-            multiplePermissionsState.launchMultiplePermissionRequest()
-        }
+@ExperimentalPermissionsApi
+class MultiplePermissionsStatePreview : MultiplePermissionsState {
+
+    override val allPermissionsGranted: Boolean
+        get() = false
+
+    override val permissions: List<PermissionState>
+        get() = emptyList()
+
+    override val revokedPermissions: List<PermissionState>
+        get() = emptyList()
+
+    override val shouldShowRationale: Boolean
+        get() = true
+
+    override fun launchMultiplePermissionRequest() {
+        // do nothing
     }
 }
 

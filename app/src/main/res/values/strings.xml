@@ -9,4 +9,5 @@
     <string name="auth_success">Signed up successfully</string>
     <string name="auth_failed">Authentication failed\n</string>
     <string name="sign_up_success">Signed up successfully</string>
+    <string name="permissions_not_granted">You can\'t proceed without required permissions</string>
 </resources>
