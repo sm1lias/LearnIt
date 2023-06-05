@@ -24,7 +24,7 @@ class ImageCaptureModel(val context: Context, private val captureInfo: PhotoInfo
 
     override fun onImageCaptured(image: File) {
 
-        var videoTime = captureInfo.exoPlayer.value.contentPosition
+        var videoTime = captureInfo.exoPlayer.contentPosition
         Toast.makeText(
             context,
             "imaged captured user: ${captureInfo.user} $videoTime",

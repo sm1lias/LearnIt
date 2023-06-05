@@ -49,7 +49,7 @@ fun VideoScreen(
                 )
             )
 
-        exoPlayer.value.prepare(source)
+        exoPlayer.prepare(source)
     }
     LaunchedEffect(viewModel.playing) {
         if (viewModel.playing) {
@@ -64,7 +64,7 @@ fun VideoScreen(
     // Gateway to traditional Android Views
     AndroidView(modifier = Modifier.fillMaxSize(),factory = { context ->
         PlayerView(context).apply {
-            player = exoPlayer.value
+            player = exoPlayer
         }
     }
     )

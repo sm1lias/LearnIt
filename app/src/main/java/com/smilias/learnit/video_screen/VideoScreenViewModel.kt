@@ -11,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import com.cottacush.android.hiddencam.CaptureTimeFrequency
 import com.cottacush.android.hiddencam.HiddenCam
 import com.cottacush.android.hiddencam.OnImageCapturedListener
+import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
 import com.google.firebase.auth.ktx.auth
@@ -27,13 +28,27 @@ import javax.inject.Inject
 
 @HiltViewModel
 class VideoScreenViewModel @Inject constructor(
-    @ApplicationContext private val context: Context
+    @ApplicationContext private val context: Context,
+    val exoPlayer: ExoPlayer
 ) : ViewModel() {
 
     var videoUrl = mutableStateOf("");
 
-    val exoPlayer = mutableStateOf(
-        SimpleExoPlayer.Builder(context).build().apply {
+//    val exoPlayer = mutableStateOf(
+//        SimpleExoPlayer.Builder(context).build().apply {
+//            this.prepare()
+//            this.playWhenReady = true
+//            addListener(
+//                object : Player.Listener {
+//                    override fun onIsPlayingChanged(isPlaying: Boolean) {
+//                        playing = isPlaying
+//                    }
+//                }
+//            )
+//        }
+//    )
+    init {
+        exoPlayer.apply {
             this.prepare()
             this.playWhenReady = true
             addListener(
@@ -44,7 +59,7 @@ class VideoScreenViewModel @Inject constructor(
                 }
             )
         }
-    )
+    }
     private val captureInfo:PhotoInfo= PhotoInfo(Firebase.auth.currentUser, exoPlayer)
 
     private val imageCapture: OnImageCapturedListener = ImageCaptureModel(context, captureInfo)
@@ -79,7 +94,7 @@ class VideoScreenViewModel @Inject constructor(
 
 
     override fun onCleared() {
-        exoPlayer.value.playWhenReady = false
+        exoPlayer.playWhenReady = false
         context.foregroundStartService("Exit")
         hiddenCam.stop()
     }

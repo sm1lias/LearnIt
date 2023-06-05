@@ -25,7 +25,6 @@ import androidx.navigation.NavController
 import com.smilias.learnit.Screen
 import com.smilias.learnit.VideoList
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MenuScreen(
     navController: NavController,
