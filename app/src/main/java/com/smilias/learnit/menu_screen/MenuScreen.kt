@@ -24,11 +24,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.smilias.learnit.Screen
 import com.smilias.learnit.VideoList
+import com.smilias.learnit.utils.UiEvent
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 @Composable
 fun MenuScreen(
-    navController: NavController,
-    viewModel: MenuScreenViewModel = hiltViewModel()
+    onNavigate: (UiEvent.Navigate) -> Unit
 ) {
 
     LazyVerticalGrid(
@@ -43,7 +45,7 @@ fun MenuScreen(
                 title = videoInfo.title,
                 modifier = Modifier.fillMaxSize(),
                 url = videoInfo.source,
-                navController
+                onNavigate = onNavigate
             )
         }
     }
@@ -57,7 +59,7 @@ fun VideoCard(
     title: String,
     modifier: Modifier,
     url: String,
-    navController: NavController
+    onNavigate: (UiEvent.Navigate) -> Unit
 ) {
     Card(
         modifier = modifier
@@ -70,7 +72,14 @@ fun VideoCard(
             modifier = Modifier
                 .height(200.dp)
                 .clickable {
-                    navController.navigate(Screen.VideoScreen.route + "/" + url.replace("/", "\\"))
+                    onNavigate(
+                        UiEvent.Navigate(
+                            Screen.VideoScreen.route + "/" + URLEncoder.encode(
+                                url,
+                                StandardCharsets.UTF_8.toString()
+                            )
+                        )
+                    )
                 }, contentAlignment = Alignment.Center
         ) {
             Image(

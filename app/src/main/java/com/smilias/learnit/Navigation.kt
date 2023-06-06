@@ -62,7 +62,7 @@ fun Navigation() {
             composable(
                 route = Screen.MenuScreen.route,
             ) {
-                MenuScreen(navController = navController)
+                MenuScreen(onNavigate = navController::navigate)
             }
             composable(
                 route = Screen.VideoScreen.route + "/{url}",
@@ -70,9 +70,6 @@ fun Navigation() {
                     type = NavType.StringType
                 })
             ) {
-//                val url: String = it.arguments?.getString("url")?.replace("\\", "/")
-//                    ?: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
-
                 val viewModel: VideoScreenViewModel = hiltViewModel()
                 VideoScreen(state = viewModel.state, onEvent = viewModel::onEvent)
             }

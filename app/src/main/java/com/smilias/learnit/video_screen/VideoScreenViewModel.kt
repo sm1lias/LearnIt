@@ -30,6 +30,8 @@ import com.smilias.learnit.video_screen.model.PhotoInfo
 import com.smilias.learnit.video_screen.service.ImageCaptureModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.net.URLDecoder
+import java.nio.charset.StandardCharsets
 import javax.inject.Inject
 
 @HiltViewModel
@@ -48,11 +50,14 @@ class VideoScreenViewModel @Inject constructor(
 
     init {
         locationLiveData.startLocationUpdates()
-        state = state.copy(videoUrl = savedStateHandle.get<String>("url")?:"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4")
+        val url = savedStateHandle.get<String>("url")?.let {
+            URLDecoder.decode(it, StandardCharsets.UTF_8.toString())
+        } ?:"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+
+        state = state.copy(videoUrl = url)
         val source = ProgressiveMediaSource.Factory(dataSourceFactory)
             .createMediaSource(
                 Uri.parse(
-                    // Big Buck Bunny from Blender Project
                     state.videoUrl
                 )
             )
