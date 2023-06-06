@@ -22,6 +22,8 @@ import com.smilias.learnit.log_in_screen.LogInScreenViewModel
 import com.smilias.learnit.menu_screen.MenuScreen
 import com.smilias.learnit.navigation.navigate
 import com.smilias.learnit.video_screen.VideoScreen
+import com.smilias.learnit.video_screen.VideoScreenState
+import com.smilias.learnit.video_screen.VideoScreenViewModel
 
 @OptIn(ExperimentalPermissionsApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -68,11 +70,11 @@ fun Navigation() {
                     type = NavType.StringType
                 })
             ) {
-                val url = it.arguments?.getString("url")
-                if (url != null) {
-                    VideoScreen(sourceUrl = url.replace("\\", "/"))
-                } else
-                    VideoScreen()
+//                val url: String = it.arguments?.getString("url")?.replace("\\", "/")
+//                    ?: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+
+                val viewModel: VideoScreenViewModel = hiltViewModel()
+                VideoScreen(state = viewModel.state, onEvent = viewModel::onEvent)
             }
         }
     }

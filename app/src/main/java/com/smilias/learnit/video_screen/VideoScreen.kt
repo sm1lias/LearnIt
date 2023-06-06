@@ -17,7 +17,8 @@ import com.smilias.learnit.utils.foregroundStartService
 
 @Composable
 fun VideoScreen(
-    sourceUrl: String = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    state: VideoScreenState,
+    onEvent: (VideoScreenEvent) -> Unit,
     viewModel: VideoScreenViewModel = hiltViewModel()
 ) {
     // This is the official way to access current context from Composable functions
@@ -26,45 +27,44 @@ fun VideoScreen(
 
 
     // Do not recreate the player everytime this Composable commits
-    val exoPlayer = remember {
-        viewModel.exoPlayer
-    }
+//    val exoPlayer = remember {
+//        viewModel.exoPlayer
+//    }
 
     // We only want to react to changes in sourceUrl.
     // This effect will be executed at each commit phase if
     // [sourceUrl] has changed.
-    LaunchedEffect(sourceUrl) {
-        viewModel.videoUrl.value = sourceUrl
-        viewModel.getVideoTitleFromUrl()
-        val dataSourceFactory: DataSource.Factory = DefaultDataSourceFactory(
-            context,
-            Util.getUserAgent(context, context.packageName)
-        )
-
-        val source = ProgressiveMediaSource.Factory(dataSourceFactory)
-            .createMediaSource(
-                Uri.parse(
-                    // Big Buck Bunny from Blender Project
-                    sourceUrl
-                )
-            )
-
-        exoPlayer.prepare(source)
-    }
-    LaunchedEffect(viewModel.playing) {
-        if (viewModel.playing) {
+//    LaunchedEffect(sourceUrl) {
+//        viewModel.getVideoTitleFromUrl()
+//        val dataSourceFactory: DataSource.Factory = DefaultDataSourceFactory(
+//            context,
+//            Util.getUserAgent(context, context.packageName)
+//        )
+//
+//        val source = ProgressiveMediaSource.Factory(dataSourceFactory)
+//            .createMediaSource(
+//                Uri.parse(
+//                    // Big Buck Bunny from Blender Project
+//                    state.videoUrl
+//                )
+//            )
+//
+//        state.exoPlayer?.prepare(source)
+//    }
+    LaunchedEffect(state.playing) {
+        if (state.playing) {
             context.foregroundStartService("Start")
-            viewModel.startCapturing()
+            onEvent(VideoScreenEvent.OnStartCapture)
         } else {
             context.foregroundStartService("Exit")
-            viewModel.stopCapturing()
+            onEvent(VideoScreenEvent.OnStopCapture)
         }
     }
 
     // Gateway to traditional Android Views
     AndroidView(modifier = Modifier.fillMaxSize(),factory = { context ->
         PlayerView(context).apply {
-            player = exoPlayer
+            player = viewModel.exoPlayer
         }
     }
     )

@@ -1,11 +1,13 @@
 package com.smilias.learnit.video_screen
 
 import android.content.Context
+import android.net.Uri
 import android.util.Size
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cottacush.android.hiddencam.CaptureTimeFrequency
@@ -14,6 +16,10 @@ import com.cottacush.android.hiddencam.OnImageCapturedListener
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.source.ProgressiveMediaSource
+import com.google.android.exoplayer2.upstream.DataSource
+import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
+import com.google.android.exoplayer2.util.Util
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.smilias.learnit.VideoList
@@ -29,51 +35,45 @@ import javax.inject.Inject
 @HiltViewModel
 class VideoScreenViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
-    val exoPlayer: ExoPlayer
+    savedStateHandle: SavedStateHandle,
+    val exoPlayer: ExoPlayer,
+    private val hiddenCam: HiddenCam,
+    private val captureInfo: PhotoInfo,
+    private val locationLiveData: LocationLiveData,
+    dataSourceFactory: DataSource.Factory
 ) : ViewModel() {
 
-    var videoUrl = mutableStateOf("");
+    var state by mutableStateOf(VideoScreenState())
+        private set
 
-//    val exoPlayer = mutableStateOf(
-//        SimpleExoPlayer.Builder(context).build().apply {
-//            this.prepare()
-//            this.playWhenReady = true
-//            addListener(
-//                object : Player.Listener {
-//                    override fun onIsPlayingChanged(isPlaying: Boolean) {
-//                        playing = isPlaying
-//                    }
-//                }
-//            )
-//        }
-//    )
     init {
-        exoPlayer.apply {
-            this.prepare()
-            this.playWhenReady = true
-            addListener(
-                object : Player.Listener {
-                    override fun onIsPlayingChanged(isPlaying: Boolean) {
-                        playing = isPlaying
-                    }
-                }
+        locationLiveData.startLocationUpdates()
+        state = state.copy(videoUrl = savedStateHandle.get<String>("url")?:"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4")
+        val source = ProgressiveMediaSource.Factory(dataSourceFactory)
+            .createMediaSource(
+                Uri.parse(
+                    // Big Buck Bunny from Blender Project
+                    state.videoUrl
+                )
             )
-        }
+        getVideoTitleFromUrl()
+        exoPlayer.prepare(source)
+
+        exoPlayer.addListener(
+            object : Player.Listener {
+                override fun onIsPlayingChanged(isPlaying: Boolean) {
+                    state = state.copy(playing = isPlaying)
+                }
+            }
+        )
+
+
+
     }
-    private val captureInfo:PhotoInfo= PhotoInfo(Firebase.auth.currentUser, exoPlayer)
 
-    private val imageCapture: OnImageCapturedListener = ImageCaptureModel(context, captureInfo)
-
-    private val hiddenCam = HiddenCam(
-        context, Utils.createBaseFolder(context), imageCapture,
-        CaptureTimeFrequency.Recurring(10 * 2000L),
-        targetResolution = Size(1080, 1920),
-//            targetRotation = Surface.ROTATION_180
-    )
-
-    fun getVideoTitleFromUrl() {
+    private fun getVideoTitleFromUrl() {
         captureInfo.title = VideoList.getVideoList().stream()
-            .filter { it.source ==this.videoUrl.value }
+            .filter { it.source == state.videoUrl }
             .findFirst()
             .map { it.title }
             .orElse("")
@@ -81,16 +81,12 @@ class VideoScreenViewModel @Inject constructor(
         captureInfo.location = locationLiveData
     }
 
-
-
-
-    var playing by mutableStateOf(false)
-        private set
-
-
-
-
-
+    fun onEvent(event: VideoScreenEvent) {
+        when (event) {
+            is VideoScreenEvent.OnStartCapture -> startCapturing()
+            is VideoScreenEvent.OnStopCapture -> stopCapturing()
+        }
+    }
 
 
     override fun onCleared() {
@@ -99,17 +95,12 @@ class VideoScreenViewModel @Inject constructor(
         hiddenCam.stop()
     }
 
-    fun startCapturing() {
+    private fun startCapturing() {
         hiddenCam.start()
     }
 
-    fun stopCapturing() {
+    private fun stopCapturing() {
         hiddenCam.stop()
-    }
-
-    private val locationLiveData = LocationLiveData(context)
-    init {
-        locationLiveData.startLocationUpdates()
     }
 
 
