@@ -38,6 +38,9 @@ class LogInScreenViewModel @Inject constructor(
 
             is LogInScreenEvent.OnPasswordEnter -> state = state.copy(password = event.password)
             is LogInScreenEvent.OnSignUp -> signUp()
+            is LogInScreenEvent.OnForgetPassword -> viewModelScope.launch {
+                state.uiEvent.send(UiEvent.Navigate(Screen.ForgetPasswordScreen.route))
+            }
             is LogInScreenEvent.OnPermissionNotGranted -> {
                 viewModelScope.launch {
                     state.uiEvent.send(UiEvent.ShowSnackbar(UiText.StringResource(R.string.permissions_not_granted)))
@@ -71,9 +74,6 @@ class LogInScreenViewModel @Inject constructor(
                             }
                         }
                     }
-                viewModelScope.launch {
-                    state.uiEvent.send(UiEvent.ShowSnackbar(UiText.StringResource(R.string.auth_success)))
-                }
             }
         }
     }

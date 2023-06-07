@@ -90,7 +90,7 @@ fun LogInScreen(
                 }
             }
         )
-        Text(text = stringResource(R.string.forgot_password), modifier = Modifier.clickable {  })
+        Text(text = stringResource(R.string.forgot_password), modifier = Modifier.clickable { onEvent(LogInScreenEvent.OnForgetPassword)})
 
         HeightSpacer(30)
         Row(

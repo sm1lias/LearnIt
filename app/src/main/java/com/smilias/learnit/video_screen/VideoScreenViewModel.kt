@@ -71,9 +71,6 @@ class VideoScreenViewModel @Inject constructor(
                 }
             }
         )
-
-
-
     }
 
     private fun getVideoTitleFromUrl() {

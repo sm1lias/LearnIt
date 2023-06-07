@@ -10,4 +10,6 @@
     <string name="auth_failed">Authentication failed\n</string>
     <string name="sign_up_success">Signed up successfully</string>
     <string name="permissions_not_granted">You can\'t proceed without required permissions</string>
+    <string name="reset_password_unsuccessfull">Reset of password was unsuccessful</string>
+    <string name="check_your_email">Check your email for reseting the password</string>
 </resources>

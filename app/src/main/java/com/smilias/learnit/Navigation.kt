@@ -17,12 +17,13 @@ import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.MultiplePermissionsState
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import com.smilias.learnit.forget_password_screen.ForgetPasswordScreen
+import com.smilias.learnit.forget_password_screen.ForgetPasswordViewModel
 import com.smilias.learnit.log_in_screen.LogInScreen
 import com.smilias.learnit.log_in_screen.LogInScreenViewModel
 import com.smilias.learnit.menu_screen.MenuScreen
 import com.smilias.learnit.navigation.navigate
 import com.smilias.learnit.video_screen.VideoScreen
-import com.smilias.learnit.video_screen.VideoScreenState
 import com.smilias.learnit.video_screen.VideoScreenViewModel
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -57,6 +58,17 @@ fun Navigation() {
                     permissionsState = permissionsState,
                     onNavigate = navController::navigate,
                     onEvent = viewmodel::onEvent
+                )
+            }
+            composable(
+                route = Screen.ForgetPasswordScreen.route
+            ){
+                val viewModel: ForgetPasswordViewModel = hiltViewModel()
+                ForgetPasswordScreen(
+                    scaffoldState = scaffoldState,
+                    state = viewModel.state,
+                    onEmailEnter = viewModel::onEmailEnter,
+                    onResetClick = viewModel::onResetClick
                 )
             }
             composable(
