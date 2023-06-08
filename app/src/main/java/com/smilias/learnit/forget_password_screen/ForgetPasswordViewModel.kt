@@ -32,6 +32,7 @@ class ForgetPasswordViewModel @Inject constructor(
             if (task.isSuccessful) {
                 viewModelScope.launch {
                     state.uiEvent.send(UiEvent.ShowSnackbar(UiText.StringResource(R.string.check_your_email)))
+                    state.uiEvent.send(UiEvent.NavigateUp)
                 }
             } else {
                 viewModelScope.launch {

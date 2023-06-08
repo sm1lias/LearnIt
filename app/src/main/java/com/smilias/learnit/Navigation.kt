@@ -68,7 +68,8 @@ fun Navigation() {
                     scaffoldState = scaffoldState,
                     state = viewModel.state,
                     onEmailEnter = viewModel::onEmailEnter,
-                    onResetClick = viewModel::onResetClick
+                    onResetClick = viewModel::onResetClick,
+                    onNavigateUp = navController::navigateUp
                 )
             }
             composable(

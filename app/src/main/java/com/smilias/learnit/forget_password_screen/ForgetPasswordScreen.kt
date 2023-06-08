@@ -26,13 +26,14 @@ fun ForgetPasswordScreen(
     scaffoldState: ScaffoldState,
     state: ForgetPasswordState,
     onEmailEnter: (String) -> Unit,
-    onResetClick: () -> Unit
+    onResetClick: () -> Unit,
+    onNavigateUp: () -> Unit
 ) {
     val context = LocalContext.current
     LaunchedEffect(key1 = true) {
         state.uiEvent.receiveAsFlow().collect() { event ->
             when (event) {
-                is UiEvent.NavigateUp -> onResetClick()
+                is UiEvent.NavigateUp -> onNavigateUp()
                 is UiEvent.ShowSnackbar -> {
                     scaffoldState.snackbarHostState.showSnackbar(
                         message = event.message.asString(context)
@@ -66,6 +67,7 @@ fun ForgetPasswordScreenPreview() {
         scaffoldState = rememberScaffoldState(),
         state = ForgetPasswordState(),
         onEmailEnter = {},
-        onResetClick = {}
+        onResetClick = {},
+        onNavigateUp = {}
     )
 }
